@@ -4,4 +4,9 @@ public class Card
 
 	public string Joke {  get; set; }
 
+	public Card(JokeTypesEnum jokeType, string joke)
+	{
+		JokeType = jokeType; 
+		Joke = joke;
+	}
 }
