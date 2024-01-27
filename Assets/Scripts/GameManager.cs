@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public bool gameStarted = false;
     public GameObject titleScreen;
     private int Totalscore = 0;
-    public float timeLeft = 5;
+    public float timeLeft = 300;
     List<Audience> Audience = new List<Audience>();
 
     // Start is called before the first frame update
