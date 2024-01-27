@@ -4,25 +4,53 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoBehaviour
+
 {
+    public TextMeshProUGUI highscoreText;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI timerText;
+    public TMP_InputField playerName;
+    public bool gameStarted = false;
+    public GameObject titleScreen;
+    private int Totalscore = 0;
+    public float timeLeft = 5;
     List<Audience> Audience = new List<Audience>();
 
     // Start is called before the first frame update
     void Start()
     {
-
+        CheckHighScore();
+        UpdateHighScoreDisplay();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (gameStarted == true)
+        {
+            RunTimer();
 
-    }
+        }
+
+        if (timeLeft <= 0) 
+        { 
+            gameStarted = false;
+        
+        }
+    }  
+        
 
     public void StartGame(bool isHard)
     {
+        gameStarted = true;
+        scoreText.gameObject.SetActive(true);
+        timerText.gameObject.SetActive(true);
+        scoreText.text = playerName.text + "'s Score : " + Totalscore;
+        titleScreen.gameObject.SetActive(false);
         GenerateAudience(isHard);
         Camera.main.GetComponent<CameraAnimation>().PlayAnimation();
     }
@@ -77,7 +105,32 @@ public class GameManager : MonoBehaviour
         }
 
         return score;
+
     }
+
+    // Checks current Totalscore against saved Highscore
+    void CheckHighScore()
+    {
+        if (Totalscore > PlayerPrefs.GetInt("Highscore"))
+        {
+            PlayerPrefs.SetInt("Highscore", Totalscore);
+            PlayerPrefs.SetString("Playername", playerName.text);
+        }
+    }
+
+    // Updates high Totalscore display with high Totalscore & name of player who scored it
+    void UpdateHighScoreDisplay()
+    {
+        highscoreText.text = $"Highscore: {PlayerPrefs.GetInt("Highscore")} {PlayerPrefs.GetString("Playername")}";
+    }
+    void RunTimer()
+    {
+        timeLeft -= Time.deltaTime;
+        var timeSpan = TimeSpan.FromSeconds(timeLeft);
+        timerText.SetText($"Time: {timeSpan.Minutes}: {timeSpan.Seconds}");
+    }
+
+   
 }
 
 
