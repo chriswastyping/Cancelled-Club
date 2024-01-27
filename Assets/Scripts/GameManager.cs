@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
 
         for(int i = 0; i < UICards.Length; i++)
         {
-           UICards[i].transform.GetChild(0).GetComponent<TextMeshPro>().text = chosenCards[i].Joke;
+           UICards[i].GetComponent<TextMeshPro>().text = chosenCards[i].Joke;
         }
     }
 
