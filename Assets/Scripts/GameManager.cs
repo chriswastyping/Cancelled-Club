@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SocialPlatforms.Impl;
 
@@ -178,8 +179,14 @@ public class GameManager : MonoBehaviour
         var timeSpan = TimeSpan.FromSeconds(timeLeft);
         timerText.SetText($"Time: {timeSpan.Minutes}: {timeSpan.Seconds}");
     }
+    //Clears high score & player name when GUI button pressed
+    public void ClearHighScore()
+    {
+        PlayerPrefs.SetInt("Highscore", 0);
+        PlayerPrefs.SetString("Playername", "");
+        UpdateHighScoreDisplay();
+    }
 
-   
 }
 
 
