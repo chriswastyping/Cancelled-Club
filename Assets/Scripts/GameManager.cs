@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
         scoreText.text = playerName.text + "'s Score : " + Totalscore;
         titleScreen.gameObject.SetActive(false);
         GenerateAudience(isHard);
+        var cards = GetCards();
         Camera.main.GetComponent<CameraAnimation>().PlayAnimation();
     }
 
@@ -93,6 +94,21 @@ public class GameManager : MonoBehaviour
             newAudience.JokePreferences = jokeDictionary;
             Audience.Add(newAudience);
         }
+    }
+
+    public List<Card> GetCards()
+    {
+        List<Card> cardsToPlay = new List<Card>();
+        var tempList = Constants.Cards.ToList();
+
+        while(cardsToPlay.Count < 3)
+        {
+            var selectedCard = tempList[UnityEngine.Random.Range(0, tempList.Count - 1)];
+            cardsToPlay.Add(selectedCard);
+            tempList.RemoveAll(x => x.JokeType == selectedCard.JokeType);
+        }
+
+        return cardsToPlay;
     }
 
     public int PlayCard(Card card)
