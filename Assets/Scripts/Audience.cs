@@ -2,24 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraAnimation : MonoBehaviour
+public class Audience : MonoBehaviour
 {
+    public Dictionary<JokeTypesEnum, int> JokePreferences { get; set; }
 
-    // private Animation cameraAnim;
     // Start is called before the first frame update
     void Start()
     {
-       
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         
-    }
-
-    public void PlayAnimation()
-    {
-        GetComponent<Animation>().Play();
     }
 }
