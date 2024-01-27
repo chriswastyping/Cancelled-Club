@@ -19,6 +19,10 @@ public class GameManager : MonoBehaviour
     private int Totalscore = 0;
     public float timeLeft = 300;
     List<Audience> Audience = new List<Audience>();
+    public GameObject Card1;
+    public GameObject Card2;
+    public GameObject Card3;
+    List<Card> CurrentAvailableCards;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +50,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame(bool isHard)
     {
+        CurrentAvailableCards = Constants.Cards.ToList();
         gameStarted = true;
         scoreText.gameObject.SetActive(true);
         timerText.gameObject.SetActive(true);
@@ -59,11 +64,16 @@ public class GameManager : MonoBehaviour
 
     private void SetCards(List<Card> chosenCards)
     {
+        Card1.SetActive(true);
+        Card2.SetActive(true);
+        Card3.SetActive(true);
+
         var UICards = GameObject.FindGameObjectsWithTag("Card");
 
-        for(int i = 0; i < UICards.Length; i++)
+        for(int i = 0; i < chosenCards.Count; i++)
         {
            UICards[i].GetComponent<TextMeshPro>().text = chosenCards[i].Joke;
+           UICards[i].transform.parent.gameObject.GetComponent<UICard>().JokeType = chosenCards[i].JokeType;  
         }
     }
 
@@ -110,28 +120,40 @@ public class GameManager : MonoBehaviour
     public List<Card> GetCards()
     {
         List<Card> cardsToPlay = new List<Card>();
-        var tempList = Constants.Cards.ToList();
+        var tempList = CurrentAvailableCards.ToList();
 
         while(cardsToPlay.Count < 3)
         {
             var selectedCard = tempList[UnityEngine.Random.Range(0, tempList.Count - 1)];
             cardsToPlay.Add(selectedCard);
             tempList.RemoveAll(x => x.JokeType == selectedCard.JokeType);
+            CurrentAvailableCards.Remove(selectedCard);
         }
 
         return cardsToPlay;
     }
 
-    public int PlayCard(Card card)
+    public void PlayCard(JokeTypesEnum joke)
     {
         int score = 0;
 
         foreach (var audience in Audience)
         {
-            score = score + audience.JokePreferences[card.JokeType];
+            score = score + audience.JokePreferences[joke];
         }
 
-        return score;
+        Totalscore += score;
+
+        scoreText.text = playerName.text + "'s Score : " + Totalscore;
+
+        CheckHighScore();
+        UpdateHighScoreDisplay();
+
+        if(gameStarted)
+        {
+           var newCards = GetCards();
+           SetCards(newCards);
+        }
 
     }
 
