@@ -15,7 +15,7 @@ public class DifficultyButton : MonoBehaviour
     {
 
         button = GetComponent<Button>();
-        //  button.onClick.AddListener(SetDifficulty);
+        button.onClick.AddListener(SetDifficulty);
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
     }
@@ -26,9 +26,9 @@ public class DifficultyButton : MonoBehaviour
 
     }
 
-    // Once difficulty is selected, game manager start game routine begins
-    // void SetDifficulty()
-    //  {
-    //     gameManager.StartGame(difficulty);
-
+   // Once difficulty is selected, game manager start game routine begins
+    void SetDifficulty()
+    {
+        gameManager.StartGame(difficulty);
+    }
 }
