@@ -53,7 +53,18 @@ public class GameManager : MonoBehaviour
         titleScreen.gameObject.SetActive(false);
         GenerateAudience(isHard);
         var cards = GetCards();
+        SetCards(cards);
         Camera.main.GetComponent<CameraAnimation>().PlayAnimation();
+    }
+
+    private void SetCards(List<Card> chosenCards)
+    {
+        var UICards = GameObject.FindGameObjectsWithTag("Card");
+
+        for(int i = 0; i < UICards.Length; i++)
+        {
+           UICards[i].transform.GetChild(0).GetComponent<TextMeshPro>().text = chosenCards[i].Joke;
+        }
     }
 
     private void GenerateAudience(bool isHardDifficulty)
