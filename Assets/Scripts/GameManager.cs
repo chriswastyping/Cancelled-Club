@@ -362,11 +362,11 @@ public class GameManager : MonoBehaviour
         CheckHighScore();
         UpdateHighScoreDisplay();
 
-        //if(gameStarted)
-        //{
-        //   var newCards = GetCards();
-        //   SetCards(newCards);
-        //}
+        if(gameStarted)
+        {
+           var newCards = GetCards();
+           SetCards(newCards);
+        }
 
 
     }
