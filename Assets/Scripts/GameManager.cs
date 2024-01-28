@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         if (gameOver)
 
         {
-            if (Totalscore > 5)
+            if (Totalscore > 100)
             {
                 gameWin = true;
                 GameWin();
@@ -239,7 +239,7 @@ public class GameManager : MonoBehaviour
     {
         
         loseScreen.gameObject.SetActive(true);
-        loseText.SetText("Sorry, " + playerName.text);
+        loseText.SetText("SORRY, " + playerName.text);
 
     }
 
