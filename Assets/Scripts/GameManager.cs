@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.SceneManagement;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class GameManager : MonoBehaviour
 
@@ -14,15 +16,24 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI highscoreText;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI timerText;
+    public TextMeshProUGUI winText;
+    public TextMeshProUGUI loseText;
     public TMP_InputField playerName;
     public bool gameStarted = false;
+    public bool gameOver = false;
+    public bool gameWin = false;
+    public bool gameLose = false;
     public GameObject titleScreen;
+    public Button restartButton;
     private int Totalscore = 0;
     public float timeLeft = 300;
     List<Audience> Audience = new List<Audience>();
     public GameObject Card1;
     public GameObject Card2;
     public GameObject Card3;
+    public GameObject winScreen;
+    public GameObject loseScreen;
+    public static GameManager Instance;
     List<Card> CurrentAvailableCards;
 
     // Start is called before the first frame update
@@ -36,15 +47,38 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (gameStarted == true)
+        
         {
-            RunTimer();
-
+            if (!gameOver) 
+            {
+                RunTimer();
+            }
+        
         }
+
 
         if (timeLeft <= 0) 
         { 
-            gameStarted = false;
+            gameOver = true;
         
+        }
+
+        if (gameOver)
+
+        {
+            if (Totalscore > 5)
+            {
+                gameWin = true;
+                GameWin();
+
+            }
+
+
+            else
+            {
+                gameLose = true;
+                GameLose();
+            }
         }
     }  
         
@@ -179,6 +213,7 @@ public class GameManager : MonoBehaviour
         var timeSpan = TimeSpan.FromSeconds(timeLeft);
         timerText.SetText($"Time: {timeSpan.Minutes}: {timeSpan.Seconds}");
     }
+
     //Clears high score & player name when GUI button pressed
     public void ClearHighScore()
     {
@@ -186,8 +221,29 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetString("Playername", "");
         UpdateHighScoreDisplay();
     }
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+   
+
+    void GameWin() 
+    {
+        winScreen.gameObject.SetActive(true);
+        winText.SetText("CONGRATULATIONS, " + playerName.text);
+
+    }
+
+    void GameLose()
+    {
+        
+        loseScreen.gameObject.SetActive(true);
+        loseText.SetText("Sorry, " + playerName.text);
+
+    }
+
 
 }
 
 
-      
