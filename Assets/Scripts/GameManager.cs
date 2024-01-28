@@ -8,7 +8,6 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.SceneManagement;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 
 public class GameManager : MonoBehaviour
@@ -37,10 +36,83 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     List<Card> CurrentAvailableCards;
     bool isHardestDifficulty;
+    bool gameEnded;
+
+    public Sprite Dad;
+
+    public Sprite Programmer;
+
+    public Sprite Country;
+
+    public Sprite Witty;
+
+    public Sprite Religious;
+
+    public AudioClip Title;
+
+    public AudioClip PickingCard;
+
+    public AudioClip GameOver;
+
+    public AudioClip Win;
+
+    public AudioClip Boss;
+
+    public AudioClip BRUH;
+
+    public AudioClip GetOffTheStage;
+
+    public AudioClip GodDoesNotApprove;
+
+    public AudioClip Hiss;
+
+    public AudioClip HolyCrap;
+
+    public AudioClip IsThatIt;
+
+    public AudioClip ApplaudTheFunnyPerson;
+
+    public AudioClip CelebrateFunny;
+
+    public AudioClip DamnnThatsFunny;
+
+    public AudioClip GodApproves;
+
+    public AudioClip IGetIt;
+
+    public AudioClip JollyGoodShow;
+
+    public AudioClip OnYouMadeIt;
+
+    public AudioClip PerfectApplause;
+
+    public AudioClip YourPrettyGood;
+
+    public List<AudioClip> BadSounds = new List<AudioClip>();
+    public List<AudioClip> GoodSounds = new List<AudioClip>();
 
     // Start is called before the first frame update
     void Start()
     {
+        BadSounds.Add(Boss);
+        BadSounds.Add(BRUH);
+        BadSounds.Add(GetOffTheStage);
+        BadSounds.Add(Hiss);
+        BadSounds.Add(HolyCrap);
+        BadSounds.Add(IsThatIt);
+        GoodSounds.Add(ApplaudTheFunnyPerson);
+        GoodSounds.Add(CelebrateFunny);
+        GoodSounds.Add(DamnnThatsFunny);
+        GoodSounds.Add(GodApproves);
+        GoodSounds.Add(IGetIt);
+        GoodSounds.Add(JollyGoodShow);
+        GoodSounds.Add(OnYouMadeIt);
+        GoodSounds.Add(PerfectApplause);
+        GoodSounds.Add(YourPrettyGood);
+
+        Camera.main.GetComponent<AudioSource>().clip = Title;
+        Camera.main.GetComponent<AudioSource>().Play();
+
         CheckHighScore();
         UpdateHighScoreDisplay();
 
@@ -64,15 +136,16 @@ public class GameManager : MonoBehaviour
         }
 
 
-        if (timeLeft <= 0) 
+        if (timeLeft <= 0 || isHardestDifficulty && Totalscore < 0) 
         { 
             gameOver = true;
         
         }
 
-        if (gameOver)
-
+        if (gameOver && !gameEnded)
         {
+            gameEnded = true;
+
             if (Totalscore > 100)
             {
                 gameWin = true;
@@ -92,6 +165,9 @@ public class GameManager : MonoBehaviour
 
     public void StartGame(bool isHard)
     {
+        Camera.main.GetComponent<AudioSource>().clip = PickingCard;
+        Camera.main.GetComponent<AudioSource>().Play();
+
         CurrentAvailableCards = Constants.Cards.ToList();
         gameStarted = true;
         scoreText.gameObject.SetActive(true);
@@ -99,6 +175,7 @@ public class GameManager : MonoBehaviour
         scoreText.text = playerName.text + "'s Score : " + Totalscore;
         // LoadScene
 
+        isHardestDifficulty = isHard;
         titleScreen.gameObject.SetActive(false);
         Background.gameObject.SetActive(false);
         GenerateAudience(isHard);
@@ -242,6 +319,41 @@ public class GameManager : MonoBehaviour
         lowerPointAudience.Balloon.transform.GetChild(0).gameObject.GetComponent<Renderer>().enabled = true;
         lowerPointAudience.Balloon.transform.GetChild(0).gameObject.GetComponent<Emoji>().SetLevel(AudienceScoreEnum.Low);
   
+        if(isHardestDifficulty)
+        {
+            if (score > Constants.HARD_SCORE_ARRAY.Max() * Audience.Count / 2)
+            {
+                var clip = GoodSounds[UnityEngine.Random.Range(0, GoodSounds.Count)];
+                var audioSource = GetComponent<AudioSource>();
+                audioSource.clip = clip;
+                audioSource.Play();
+            }
+            else
+            {
+                var clip = BadSounds[UnityEngine.Random.Range(0, BadSounds.Count)];
+                var audioSource = GetComponent<AudioSource>();
+                audioSource.clip = clip;
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            if (score > Constants.EASY_SCORE_ARRAY.Max() * Audience.Count / 2)
+            {
+                var clip = GoodSounds[UnityEngine.Random.Range(0, GoodSounds.Count)];
+                var audioSource = GetComponent<AudioSource>();
+                audioSource.clip = clip;
+                audioSource.Play();
+            }
+            else
+            {
+                var clip = BadSounds[UnityEngine.Random.Range(0, BadSounds.Count)];
+                var audioSource = GetComponent<AudioSource>();
+                audioSource.clip = clip;
+                audioSource.Play();
+            }
+        }
+
 
         Totalscore += score;
 
@@ -250,11 +362,12 @@ public class GameManager : MonoBehaviour
         CheckHighScore();
         UpdateHighScoreDisplay();
 
-        if(gameStarted)
-        {
-           var newCards = GetCards();
-           SetCards(newCards);
-        }
+        //if(gameStarted)
+        //{
+        //   var newCards = GetCards();
+        //   SetCards(newCards);
+        //}
+
 
     }
 
@@ -296,18 +409,23 @@ public class GameManager : MonoBehaviour
 
     void GameWin() 
     {
-        Card1.SetActive(false);
-        Card2.SetActive(false);
-        Card3.SetActive(false);
-
         Background.gameObject.SetActive(true);
         winScreen.gameObject.SetActive(true);
         winText.SetText("CONGRATULATIONS, " + playerName.text);
 
+        Card1.SetActive(false);
+        Card2.SetActive(false);
+        Card3.SetActive(false);
+
+        Camera.main.GetComponent<AudioSource>().clip = Win;
+        Camera.main.GetComponent<AudioSource>().Play();
     }
 
     void GameLose()
     {
+        Camera.main.GetComponent<AudioSource>().clip = GameOver;
+        Camera.main.GetComponent<AudioSource>().Play();
+
         Card1.SetActive(false);
         Card2.SetActive(false);
         Card3.SetActive(false);
