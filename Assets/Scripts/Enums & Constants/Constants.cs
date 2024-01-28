@@ -169,8 +169,12 @@ public static class Constants
         new Card(JokeTypesEnum.DadJokes, "I will rise, but I won't shine "),
         new Card(JokeTypesEnum.WittyJokes, "What did one flead say to the other?  'Shall we walk or take the cat?' "),
         new Card(JokeTypesEnum.DadJokes, "What's the difference between a teenager and a cat?  One is lazy, eats a lot & doesn't care who brings the food.  The other is an animal "),
-
-
+        new Card(JokeTypesEnum.DadJokes, "What does a baby computer call his father?  DaTa"),
+        new Card(JokeTypesEnum.DadJokes, "I only get sick on weekdays - I must have a weekend immune system"),
+        new Card(JokeTypesEnum.CountryJokes, "What do you call a Frenchman in sandals?  Philippe Flop"),
+        new Card(JokeTypesEnum.DadJokes, "Why is it so cheap to host a party at a haunted house?  Because the ghosts bring all the boos"),
+        new Card(JokeTypesEnum.DadJokes, "I just found out I'm colourblind...the news came out of the purple!"),
+        new Card(JokeTypesEnum.DadJokes, "How do cows stay up to date?  They read the moo  spaper!"),
     };
 
 }
