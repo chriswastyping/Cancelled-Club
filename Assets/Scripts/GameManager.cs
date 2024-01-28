@@ -24,12 +24,18 @@ public class GameManager : MonoBehaviour
     public GameObject Card2;
     public GameObject Card3;
     List<Card> CurrentAvailableCards;
+    bool isHardestDifficulty;
 
     // Start is called before the first frame update
     void Start()
     {
         CheckHighScore();
         UpdateHighScoreDisplay();
+
+        foreach (var gameObject in GameObject.FindGameObjectsWithTag("Balloon"))
+        {
+            gameObject.GetComponent<Renderer>().enabled = false;
+        }
     }
 
     // Update is called once per frame
@@ -80,6 +86,7 @@ public class GameManager : MonoBehaviour
 
     private void GenerateAudience(bool isHardDifficulty)
     {
+        isHardDifficulty = isHardestDifficulty;
         var maxEnum = Enum.GetNames(typeof(JokeTypesEnum)).Length;
         var audienceObjects = GameObject.FindGameObjectsWithTag("Audience");
 
@@ -113,6 +120,7 @@ public class GameManager : MonoBehaviour
             }
 
             var newAudience = audienceObjects[i].AddComponent<Audience>();
+            newAudience.Balloon = audienceObjects[i].transform.GetChild(0).gameObject;
             newAudience.JokePreferences = jokeDictionary;
             Audience.Add(newAudience);
         }
@@ -136,12 +144,65 @@ public class GameManager : MonoBehaviour
 
     public void PlayCard(JokeTypesEnum joke)
     {
+        foreach (var gameObject in GameObject.FindGameObjectsWithTag("Balloon"))
+        {
+            gameObject.GetComponent<Renderer>().enabled = false;
+            gameObject.transform.GetChild(0).GetComponent<Renderer>().enabled = false;
+        }
+
         int score = 0;
+        int highestPreference = 0;
+        int lowestPreference = isHardestDifficulty ? Constants.HARD_SCORE_ARRAY.Last() : Constants.EASY_SCORE_ARRAY.Last();
+        int midPointPreference = 0;
+        Audience higherPointAudience = null;
+        Audience lowerPointAudience = null;
+        Audience midPointAudience = null;
+        List<int> preferences =new List<int>();
 
         foreach (var audience in Audience)
         {
             score = score + audience.JokePreferences[joke];
+            preferences.Add(audience.JokePreferences[joke]);
+
+            if(highestPreference < audience.JokePreferences[joke])
+            {
+                highestPreference = audience.JokePreferences[joke];
+                higherPointAudience = audience;
+            }
+
+            if (lowestPreference > audience.JokePreferences[joke])
+            {
+                lowestPreference = audience.JokePreferences[joke];
+                lowerPointAudience = audience;
+            }
         }
+
+        preferences.RemoveAll(x => x == 0);
+        preferences.Sort();
+        preferences.Reverse();
+
+        midPointPreference = preferences[(int)(preferences.Count - 1) / 2];
+
+        if (Audience.Any(x => x.JokePreferences[joke] == midPointPreference && x != higherPointAudience && x != lowerPointAudience))
+        {
+            midPointAudience = Audience.First(x => x.JokePreferences[joke] == midPointPreference && x != higherPointAudience && x != lowerPointAudience);
+        }
+
+        higherPointAudience.Balloon.GetComponent<Renderer>().enabled = true;
+        higherPointAudience.Balloon.transform.GetChild(0).gameObject.GetComponent<Renderer>().enabled = true;
+        higherPointAudience.Balloon.transform.GetChild(0).gameObject.GetComponent<Emoji>().SetLevel(AudienceScoreEnum.High);
+
+        if (midPointAudience != null)
+        {
+            midPointAudience.Balloon.GetComponent<Renderer>().enabled = true;
+            midPointAudience.Balloon.transform.GetChild(0).gameObject.GetComponent<Renderer>().enabled = true;
+            midPointAudience.Balloon.transform.GetChild(0).gameObject.GetComponent<Emoji>().SetLevel(AudienceScoreEnum.Medium);
+        }
+
+        lowerPointAudience.Balloon.GetComponent<Renderer>().enabled = true;
+        lowerPointAudience.Balloon.transform.GetChild(0).gameObject.GetComponent<Renderer>().enabled = true;
+        lowerPointAudience.Balloon.transform.GetChild(0).gameObject.GetComponent<Emoji>().SetLevel(AudienceScoreEnum.Low);
+  
 
         Totalscore += score;
 

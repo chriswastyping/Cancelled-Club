@@ -6,6 +6,8 @@ public class Audience : MonoBehaviour
 {
     public Dictionary<JokeTypesEnum, int> JokePreferences { get; set; }
 
+    public GameObject Balloon { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {

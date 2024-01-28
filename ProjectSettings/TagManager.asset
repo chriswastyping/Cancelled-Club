@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Audience
   - Card
+  - Balloon
   layers:
   - Default
   - TransparentFX
