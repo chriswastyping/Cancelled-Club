@@ -7,12 +7,17 @@ public class Player_Animation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-      //  GetComponent<Animation>().Play();
+      
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void PlayerPlayAnimation()
+    {
+        GetComponent<Animation>().Play();
     }
 }

@@ -18,7 +18,7 @@ public class CameraAnimation : MonoBehaviour
         
     }
 
-    public void PlayAnimation()
+    public void CameraPlayAnimation()
     {
         GetComponent<Animation>().Play();
     }
