@@ -296,6 +296,11 @@ public class GameManager : MonoBehaviour
 
     void GameWin() 
     {
+        Card1.SetActive(false);
+        Card2.SetActive(false);
+        Card3.SetActive(false);
+
+        Background.gameObject.SetActive(true);
         winScreen.gameObject.SetActive(true);
         winText.SetText("CONGRATULATIONS, " + playerName.text);
 
@@ -303,10 +308,13 @@ public class GameManager : MonoBehaviour
 
     void GameLose()
     {
-        
+        Card1.SetActive(false);
+        Card2.SetActive(false);
+        Card3.SetActive(false);
+
+        Background.gameObject.SetActive(true);
         loseScreen.gameObject.SetActive(true);
         loseText.SetText("SORRY, " + playerName.text);
-
     }
 
 
