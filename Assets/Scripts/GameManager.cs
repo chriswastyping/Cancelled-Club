@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SocialPlatforms.Impl;
 
+
 public class GameManager : MonoBehaviour
 
 {
@@ -17,6 +18,7 @@ public class GameManager : MonoBehaviour
     public TMP_InputField playerName;
     public bool gameStarted = false;
     public GameObject titleScreen;
+    public GameObject Background;
     private int Totalscore = 0;
     public float timeLeft = 300;
     List<Audience> Audience = new List<Audience>();
@@ -24,12 +26,16 @@ public class GameManager : MonoBehaviour
     public GameObject Card2;
     public GameObject Card3;
     List<Card> CurrentAvailableCards;
+  
+
+
 
     // Start is called before the first frame update
     void Start()
     {
         CheckHighScore();
         UpdateHighScoreDisplay();
+       
     }
 
     // Update is called once per frame
@@ -56,11 +62,15 @@ public class GameManager : MonoBehaviour
         scoreText.gameObject.SetActive(true);
         timerText.gameObject.SetActive(true);
         scoreText.text = playerName.text + "'s Score : " + Totalscore;
+        // LoadScene
+
         titleScreen.gameObject.SetActive(false);
+        Background.gameObject.SetActive(false);
         GenerateAudience(isHard);
         var cards = GetCards();
         SetCards(cards);
-        Camera.main.GetComponent<CameraAnimation>().PlayAnimation();
+        
+        
     }
 
     private void SetCards(List<Card> chosenCards)
